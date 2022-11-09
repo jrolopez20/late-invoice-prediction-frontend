@@ -5,7 +5,7 @@
         <q-toolbar-title>
           <q-avatar>
             <img
-              src="https://scontent.fcuu3-1.fna.fbcdn.net/v/t39.30808-6/277561253_4282569695179356_3827948783356771795_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=TbhKQip0REIAX-uZ9OT&_nc_ht=scontent.fcuu3-1.fna&oh=00_AT-jX3bYTz_tyrrnfyCDji5Z_fyLgzgKW50QOLR_kZKFqQ&oe=635B5406"
+              src="https://usuarios.blucapital.mx/_nuxt/img/bluCapital.3a1bb24.png"
             />
           </q-avatar>
           Forecasting Account Receivables - Demo
