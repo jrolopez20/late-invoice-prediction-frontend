@@ -24,7 +24,7 @@
         <div class="row">
           <div class="col-sm-6 col-12 q-pa-sm">
             <q-input
-              v-model="formState.Fecha"
+              v-model="formState.CreatedAt"
               mask="date"
               :rules="[
                 (val) =>
@@ -40,7 +40,7 @@
                     transition-show="scale"
                     transition-hide="scale"
                   >
-                    <q-date v-model="formState.Fecha">
+                    <q-date v-model="formState.CreatedAt">
                       <div class="row items-center justify-end">
                         <q-btn
                           v-close-popup
@@ -57,27 +57,14 @@
           </div>
           <div class="col-sm-6 col-12 q-pa-sm">
             <q-input
-              v-model="formState.RFCCliente"
-              label="RFCCliente *"
-              :rules="[
-                (val) =>
-                  (val !== null && val !== '') ||
-                  'Please RFCCliente is required',
-              ]"
-            />
-          </div>
-
-          <div class="col-sm-6 col-12 q-pa-sm">
-            <q-input
-              v-model="formState.FechaVencimiento"
+              v-model="formState.DueDate"
               mask="date"
               :rules="[
                 (val) =>
-                  (val !== null && val !== '') ||
-                  'Please FechaVencimiento is required',
+                  (val !== null && val !== '') || 'Please DueDate is required',
                 'date',
               ]"
-              label="FechaVencimiento *"
+              label="Fecha de expiración *"
             >
               <template v-slot:append>
                 <q-icon name="event" class="cursor-pointer">
@@ -86,7 +73,7 @@
                     transition-show="scale"
                     transition-hide="scale"
                   >
-                    <q-date v-model="formState.FechaVencimiento">
+                    <q-date v-model="formState.DueDate">
                       <div class="row items-center justify-end">
                         <q-btn
                           v-close-popup
@@ -102,15 +89,100 @@
             </q-input>
           </div>
           <div class="col-sm-6 col-12 q-pa-sm">
-            <!-- type="number" -->
             <q-input
-              v-model="formState.Monto"
+              v-model="formState.Dob"
+              mask="date"
+              :rules="[
+                (val) =>
+                  (val !== null && val !== '') || 'Please dob is required',
+                'date',
+              ]"
+              label="Fecha de nacimiento *"
+            >
+              <template v-slot:append>
+                <q-icon name="event" class="cursor-pointer">
+                  <q-popup-proxy
+                    cover
+                    transition-show="scale"
+                    transition-hide="scale"
+                  >
+                    <q-date v-model="formState.Dob">
+                      <div class="row items-center justify-end">
+                        <q-btn
+                          v-close-popup
+                          label="Close"
+                          color="primary"
+                          flat
+                        />
+                      </div>
+                    </q-date>
+                  </q-popup-proxy>
+                </q-icon>
+              </template>
+            </q-input>
+          </div>
+          <div class="col-sm-6 col-12 q-pa-sm">
+            <q-input
+              v-model="formState.RFCPagador"
+              label="RFC del cliente *"
+              :rules="[
+                (val) =>
+                  (val !== null && val !== '') || 'Please RFC is required',
+              ]"
+            />
+          </div>
+          <div class="col-sm-6 col-12 q-pa-sm">
+            <q-input
+              v-model="formState.Amount"
               label="Monto *"
               :rules="[
                 (val) =>
                   (val !== null && val !== '') || 'Please type your amount',
                 (val) => val > 0 || 'Please type a real amount',
               ]"
+            />
+          </div>
+          <div class="col-sm-6 col-12 q-pa-sm">
+            <q-input
+              v-model="formState.CreditLineLimit"
+              label="Línea límite *"
+              :rules="[
+                (val) =>
+                  (val !== null && val !== '') ||
+                  'Please type your credit line limit',
+                (val) => val > 0 || 'Please type a real credit line limit',
+              ]"
+            />
+          </div>
+          <div class="col-sm-4 col-12 q-pa-sm">
+            <q-input
+              v-model="formState.AdvancePercentage"
+              label="Porcentaje de adelanto *"
+              :rules="[
+                (val) =>
+                  (val !== null && val !== '') ||
+                  'Please type your advance percentage',
+                (val) => val > 0 || 'Please type a real advance percentage',
+              ]"
+            />
+          </div>
+          <div class="col-sm-4 col-12 q-pa-sm">
+            <q-select
+              v-model="formState.TaxRegime"
+              :options="taxRegimeList"
+              label="Régimen fiscal *"
+              :rules="[
+                (val) =>
+                  (val !== null && val !== '') ||
+                  'Please select your tax regime',
+              ]"
+            />
+          </div>
+          <div class="col-sm-4 col-12 q-pa-sm">
+            <q-select
+              v-model="formState.Sector"
+              :options="sectorList"
+              label="Sector *"
             />
           </div>
         </div>
@@ -131,14 +203,13 @@ import { useQuasar } from 'quasar';
 import { ref, reactive } from 'vue';
 import { api } from 'boot/axios';
 
-function buildData(invoice) {
-  const Fecha = invoice.Fecha;
-  const RFCCliente = invoice.RFCCliente;
-  const FechaVencimiento = invoice.FechaVencimiento;
-  const Monto = Number(invoice.Monto);
-
-  return [Fecha, RFCCliente, FechaVencimiento, Monto];
-}
+// function buildData(invoice) {
+//   const CreatedAt = invoice.CreatedAt;
+//   const RFCPagador = invoice.RFCPagador;
+//   const DueDate = invoice.DueDate;
+//   const Amount = Number(invoice.Amount);
+//   return [CreatedAt, RFCPagador, DueDate, Amount];
+// }
 
 export default {
   setup() {
@@ -149,10 +220,15 @@ export default {
     const messageStyle = ref(null);
 
     const formState = reactive({
-      Fecha: '',
-      RFCCliente: '',
-      FechaVencimiento: '',
-      Monto: 0,
+      CreatedAt: '',
+      DueDate: '',
+      RFCPagador: '',
+      Amount: 0,
+      AdvancePercentage: 0, // Porcentaje de adelanto
+      CreditLineLimit: 0, // Línea límite
+      TaxRegime: null, // Cliente regimen fiscal
+      Sector: null, // Cliente sector
+      Dob: '', // Fecha de nacimiento del cliente
     });
 
     function predictionToString(prediction) {
@@ -176,7 +252,7 @@ export default {
     function onSubmit() {
       myForm.value.validate().then((success) => {
         if (success) {
-          const data = [buildData({ ...formState })];
+          const data = { ...formState };
 
           $q.loading.show();
           api
@@ -208,10 +284,15 @@ export default {
     }
 
     function onReset() {
-      formState.Fecha = '';
-      formState.RFCCliente = '';
-      formState.FechaVencimiento = '';
-      formState.Monto = 0;
+      formState.CreatedAt = '';
+      formState.DueDate = '';
+      formState.Dob = '';
+      formState.RFCPagador = '';
+      formState.Amount = 0;
+      formState.AdvancePercentage = 0;
+      formState.CreditLineLimit = 0;
+      formState.TaxRegime = null;
+      formState.Sector = null;
       myForm.value.resetValidation();
     }
 
@@ -227,6 +308,15 @@ export default {
       onReset,
       result,
       messageStyle,
+      taxRegimeList: [
+        { label: 'PM', value: 0 },
+        { label: 'PFAE', value: 1 },
+      ],
+      sectorList: [
+        { label: 'Privado', value: 0 },
+        { label: 'Micro Empresa', value: 1 },
+        { label: 'Rural', value: 2 },
+      ],
     };
   },
 };
