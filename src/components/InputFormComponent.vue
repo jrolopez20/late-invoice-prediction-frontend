@@ -259,7 +259,7 @@ export default {
             linea_limite: formState.CreditLineLimit,
             fecha_nacimiento: formState.Dob,
             fecha_fin: formState.DueDate,
-            RFCPagador: formState.RFCPagador,
+            pagador_rfc: formState.RFCPagador,
             cliente_sector: formState.Sector.value,
             cliente_regimen_fiscal: formState.TaxRegime.value,
           };
