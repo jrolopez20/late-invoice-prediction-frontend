@@ -15,7 +15,8 @@ declare module '@vue/runtime-core' {
 // for each client)
 // const api = axios.create({ baseURL: 'http://localhost:3001/api/' });
 const api = axios.create({
-  baseURL: 'https://6kvcpeavta.execute-api.us-west-2.amazonaws.com/',
+  baseURL: 'http://127.0.0.1:5000'
+  // baseURL: 'https://6kvcpeavta.execute-api.us-west-2.amazonaws.com/',
 });
 
 export default boot(({ app }) => {

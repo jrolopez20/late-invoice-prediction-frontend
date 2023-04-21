@@ -252,11 +252,16 @@ export default {
     function onSubmit() {
       myForm.value.validate().then((success) => {
         if (success) {
-          const data = { ...formState };
+          const { Sector, TaxRegime, ...values } = formState;
+          const data = {
+            ...values,
+            Sector: Sector.value,
+            TaxRegime: TaxRegime.value,
+          };
 
           $q.loading.show();
           api
-            .post('/finance_factoring', data)
+            .post('/predict', data)
             .then((response) => {
               $q.loading.hide();
               const predicted = response.data;
