@@ -252,11 +252,16 @@ export default {
     function onSubmit() {
       myForm.value.validate().then((success) => {
         if (success) {
-          const { Sector, TaxRegime, ...values } = formState;
           const data = {
-            ...values,
-            Sector: Sector.value,
-            TaxRegime: TaxRegime.value,
+            porcentaje_adelanto: formState.AdvancePercentage,
+            factura_importe: formState.Amount,
+            fecha_inicio: formState.CreatedAt,
+            linea_limite: formState.CreditLineLimit,
+            fecha_nacimiento: formState.Dob,
+            fecha_fin: formState.DueDate,
+            RFCPagador: formState.RFCPagador,
+            cliente_sector: formState.Sector.value,
+            cliente_regimen_fiscal: formState.TaxRegime.value,
           };
 
           $q.loading.show();
