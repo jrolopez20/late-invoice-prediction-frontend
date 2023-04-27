@@ -188,6 +188,13 @@
         </div>
       </q-card-section>
 
+      <q-card-section v-if="result">
+        <iframe
+          :srcdoc="explanation"
+          style="width: 100%; height: 250px"
+        ></iframe>
+      </q-card-section>
+
       <q-separator />
 
       <q-card-actions align="right">
@@ -217,18 +224,19 @@ export default {
     const $q = useQuasar();
 
     const result = ref(null);
+    const explanation = ref(null);
     const messageStyle = ref(null);
 
     const formState = reactive({
-      CreatedAt: '',
-      DueDate: '',
-      RFCPagador: '',
-      Amount: 0,
-      AdvancePercentage: 0, // Porcentaje de adelanto
-      CreditLineLimit: 0, // Línea límite
+      CreatedAt: '2022/11/01',
+      DueDate: '2023/02/01',
+      RFCPagador: 'XSASD324',
+      Amount: 120,
+      AdvancePercentage: 1500, // Porcentaje de adelanto
+      CreditLineLimit: 2566000, // Línea límite
       TaxRegime: null, // Cliente regimen fiscal
       Sector: null, // Cliente sector
-      Dob: '', // Fecha de nacimiento del cliente
+      Dob: '1985/12/04', // Fecha de nacimiento del cliente
     });
 
     function predictionToString(prediction) {
@@ -269,9 +277,11 @@ export default {
             .post('/predict', data)
             .then((response) => {
               $q.loading.hide();
-              const predicted = response.data;
+              const data = response.data;
+              // console.log(data.explainer_html);
+              explanation.value = data.explainer_html;
               result.value = `Esta factura es posible que se pague <b>${predictionToString(
-                predicted[0]
+                data.prediction[0]
               )}</b>`;
 
               $q.notify({
@@ -304,6 +314,8 @@ export default {
       formState.TaxRegime = null;
       formState.Sector = null;
       myForm.value.resetValidation();
+      result.value = null;
+      explanation.value = null;
     }
 
     function onDismiss() {
@@ -317,6 +329,7 @@ export default {
       onDismiss,
       onReset,
       result,
+      explanation,
       messageStyle,
       taxRegimeList: [
         { label: 'PM', value: 0 },
