@@ -131,7 +131,7 @@
               ]"
             />
           </div>
-          <div class="col-sm-6 col-12 q-pa-sm">
+          <div class="col-sm-4 col-12 q-pa-sm">
             <q-input
               v-model="formState.Amount"
               label="Monto *"
@@ -142,7 +142,7 @@
               ]"
             />
           </div>
-          <div class="col-sm-6 col-12 q-pa-sm">
+          <div class="col-sm-4 col-12 q-pa-sm">
             <q-input
               v-model="formState.CreditLineLimit"
               label="Línea límite *"
@@ -164,25 +164,6 @@
                   'Please type your advance percentage',
                 (val) => val > 0 || 'Please type a real advance percentage',
               ]"
-            />
-          </div>
-          <div class="col-sm-4 col-12 q-pa-sm">
-            <q-select
-              v-model="formState.TaxRegime"
-              :options="taxRegimeList"
-              label="Régimen fiscal *"
-              :rules="[
-                (val) =>
-                  (val !== null && val !== '') ||
-                  'Please select your tax regime',
-              ]"
-            />
-          </div>
-          <div class="col-sm-4 col-12 q-pa-sm">
-            <q-select
-              v-model="formState.Sector"
-              :options="sectorList"
-              label="Sector *"
             />
           </div>
         </div>
@@ -210,14 +191,6 @@ import { useQuasar } from 'quasar';
 import { ref, reactive } from 'vue';
 import { api } from 'boot/axios';
 
-// function buildData(invoice) {
-//   const CreatedAt = invoice.CreatedAt;
-//   const RFCPagador = invoice.RFCPagador;
-//   const DueDate = invoice.DueDate;
-//   const Amount = Number(invoice.Amount);
-//   return [CreatedAt, RFCPagador, DueDate, Amount];
-// }
-
 export default {
   setup() {
     const myForm = ref(null);
@@ -234,8 +207,6 @@ export default {
       Amount: 120,
       AdvancePercentage: 1500, // Porcentaje de adelanto
       CreditLineLimit: 2566000, // Línea límite
-      TaxRegime: null, // Cliente regimen fiscal
-      Sector: null, // Cliente sector
       Dob: '1985/12/04', // Fecha de nacimiento del cliente
     });
 
@@ -268,8 +239,6 @@ export default {
             fecha_nacimiento: formState.Dob,
             fecha_fin: formState.DueDate,
             pagador_rfc: formState.RFCPagador,
-            cliente_sector: formState.Sector.value,
-            cliente_regimen_fiscal: formState.TaxRegime.value,
           };
 
           $q.loading.show();
@@ -311,8 +280,6 @@ export default {
       formState.Amount = 0;
       formState.AdvancePercentage = 0;
       formState.CreditLineLimit = 0;
-      formState.TaxRegime = null;
-      formState.Sector = null;
       myForm.value.resetValidation();
       result.value = null;
       explanation.value = null;
@@ -331,15 +298,6 @@ export default {
       result,
       explanation,
       messageStyle,
-      taxRegimeList: [
-        { label: 'PM', value: 0 },
-        { label: 'PFAE', value: 1 },
-      ],
-      sectorList: [
-        { label: 'Privado', value: 0 },
-        { label: 'Micro Empresa', value: 1 },
-        { label: 'Rural', value: 2 },
-      ],
     };
   },
 };
