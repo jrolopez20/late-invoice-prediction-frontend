@@ -1,8 +1,15 @@
 <template>
-  <q-form ref="myForm" autofocus @submit="onSubmit" @reset="onReset">
+  <q-form
+    ref="myForm"
+    autofocus
+    @submit="onSubmit"
+    @reset="onReset"
+    style="padding: 10px"
+  >
     <q-card class="my-card">
       <q-card-section class="bg-primary text-white">
-        <div class="text-h6">Invoice information</div>
+        <div class="text-h6">Accounts receivable prediction form</div>
+        <span>Please introduce the invoice information</span>
       </q-card-section>
 
       <q-card-section v-if="result">
@@ -124,7 +131,7 @@
           <div class="col-sm-6 col-12 q-pa-sm">
             <q-input
               v-model="formState.RFCPagador"
-              label="RFC del cliente *"
+              label="RFC del pagador *"
               :rules="[
                 (val) =>
                   (val !== null && val !== '') || 'Please RFC is required',
@@ -215,16 +222,19 @@ export default {
       switch (prediction) {
         case 1:
           messageStyle.value = 'bg-green';
-          return 'en tiempo';
+          return 'before time';
         case 2:
-          messageStyle.value = 'bg-orange';
-          return 'de 1 a 30 días';
+          messageStyle.value = 'bg-green';
+          return 'on time';
         case 3:
-          return 'de 31 a 60 días';
+          messageStyle.value = 'bg-orange';
+          return '1-7 days late';
         case 4:
-          return 'de 61 a 90 días';
+          return '8-21 days late';
+        case 5:
+          return 'More than 21 days late';
         default:
-          return 'más de 90 días';
+          return 'Unknow prediction';
       }
     }
 
@@ -249,7 +259,7 @@ export default {
               const data = response.data;
               // console.log(data.explainer_html);
               explanation.value = data.explainer_html;
-              result.value = `Esta factura es posible que se pague <b>${predictionToString(
+              result.value = `This invoice may be paid: <b>${predictionToString(
                 data.prediction[0]
               )}</b>`;
 
