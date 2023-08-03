@@ -22,7 +22,7 @@
       </q-toolbar>
     </q-header>
 
-    <q-drawer show-if-above v-model="rightDrawerOpen" side="right" bordered>
+    <!-- <q-drawer show-if-above v-model="rightDrawerOpen" side="right" bordered>
       <div class="q-pa-sm" style="max-width: 350px">
         <q-list bordered class="rounded-borders">
           <q-expansion-item
@@ -171,7 +171,7 @@
           </q-expansion-item>
         </q-list>
       </div>
-    </q-drawer>
+    </q-drawer> -->
 
     <q-page-container>
       <router-view />
